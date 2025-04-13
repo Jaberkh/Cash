@@ -6,7 +6,7 @@ const fetch = require("node-fetch");
 const CACHE_PATH = path.join(__dirname, "../data/DB.json");
 
 async function updateCache() {
-  const duneRes = await fetch("https://api.dune.com/api/v1/query/4837362/results?api_key=xTfUgOKOpG958K3MYFJ3ku9eGuP7wSVQ");
+  const duneRes = await fetch(`https://api.dune.com/api/v1/query/4837362/results?api_key=${process.env.DUNE_API_KEY}`);
   if (!duneRes.ok) throw new Error("Failed to fetch Dune data");
   const duneJson = await duneRes.json();
 
