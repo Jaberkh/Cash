@@ -22,8 +22,8 @@ jobs:
 
       # مرحله 3: نصب وابستگی‌ها
       - name: Install dependencies
-        run: npm install
-        working-directory: ./scripts  # تنظیم مسیر درست برای npm install
+        run: npm install  # دستور npm install
+        working-directory: ./scripts  # اینجا مسیر درست را تنظیم کردیم
 
       # مرحله 4: دریافت داده‌ها از Dune و بروزرسانی کش
       - name: Fetch data from Dune & update cache
