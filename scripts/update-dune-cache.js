@@ -1,22 +1,43 @@
-import fs from "fs/promises";
-import path from "path";
+const fetch = require('node-fetch');
+const fs = require('fs');
+const path = require('path');
 
-const CACHE_PATH = path.join("data", "DB.json");
+const CACHE_PATH = path.join(__dirname, '..', 'data', 'DB.json');  // مسیر ذخیره کش
+const DUNE_API_KEY = process.env.DUNE_API_KEY;  // کلید API از GitHub Secrets
 
 async function fetchDuneData() {
-  const res = await fetch("https://api.dune.com/api/v1/query/4837362/results?api_key=" + process.env.DUNE_API_KEY);
-  if (!res.ok) throw new Error("Failed to fetch data from Dune");
-  return await res.json();
+  try {
+    const res = await fetch(`https://api.dune.com/api/v1/query/4837362/results?api_key=${DUNE_API_KEY}`);
+    
+    if (!res.ok) {
+      throw new Error('Failed to fetch data from Dune');
+    }
+
+    const data = await res.json();
+    console.log('Fetched Dune data:', data);  // چاپ داده‌های دریافتی از API
+
+    return data;
+  } catch (error) {
+    console.error('Error fetching Dune data:', error);
+    return null;
+  }
 }
 
 async function updateCache() {
   const data = await fetchDuneData();
-  await fs.mkdir(path.dirname(CACHE_PATH), { recursive: true });
-  await fs.writeFile(CACHE_PATH, JSON.stringify({ updatedAt: Date.now(), data }, null, 2));
-  console.log("✅ Dune data cached successfully.");
+  
+  if (data) {
+    const cache = {
+      updatedAt: Date.now(),
+      data: data
+    };
+
+    // ذخیره کش در فایل DB.json
+    fs.writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2));
+    console.log('Cache updated successfully');
+  } else {
+    console.log('No data fetched, cache not updated');
+  }
 }
 
-updateCache().catch(err => {
-  console.error("❌ Failed to update Dune cache:", err);
-  process.exit(1);
-});
+updateCache();
