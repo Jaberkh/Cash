@@ -2,7 +2,7 @@ name: Update Dune Cache
 
 on:
   schedule:
-    - cron: "25 00 * * *"  # هر روز ساعت 00:25 UTC
+    - cron: "22 00 * * *"  # هر روز ساعت 00:25 UTC
   workflow_dispatch:
 
 jobs:
