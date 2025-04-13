@@ -23,11 +23,11 @@ jobs:
       # مرحله 3: نصب وابستگی‌ها
       - name: Install dependencies
         run: npm install  # دستور npm install
-        working-directory: ./scripts  # اینجا مسیر درست را تنظیم کردیم
+        working-directory: ./scripts  # اینجا مسیر درست را تنظیم کردیم تا npm بتواند package.json را در این مسیر پیدا کند
 
       # مرحله 4: دریافت داده‌ها از Dune و بروزرسانی کش
       - name: Fetch data from Dune & update cache
-        run: node ./scripts/update-dune-cache.js
+        run: node update-dune-cache.js  # این بار چون در دایرکتوری ./scripts هستیم، نیازی به مسیر کامل نیست
         working-directory: ./scripts
         env:
           DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}  # استفاده از کلید API از Secrets
