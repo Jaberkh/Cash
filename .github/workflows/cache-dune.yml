@@ -14,31 +14,39 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      # مرحله 2: نصب Node.js
+      # مرحله 2: چاپ مسیرهای دایرکتوری برای بررسی
+      - name: Check directory structure
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Contents of current directory:"
+          ls -alh
+
+      # مرحله 3: نصب Node.js
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: "18"
 
-      # مرحله 3: نصب وابستگی‌ها
+      # مرحله 4: نصب وابستگی‌ها
       - name: Install dependencies
-        run: npm install  # دستور npm install
-        working-directory: ./scripts  # اینجا مسیر درست را تنظیم کردیم تا npm بتواند package.json را در این مسیر پیدا کند
+        run: npm install
+        working-directory: ./scripts  # دایرکتوری صحیح برای npm install
 
-      # مرحله 4: دریافت داده‌ها از Dune و بروزرسانی کش
+      # مرحله 5: دریافت داده‌ها از Dune و بروزرسانی کش
       - name: Fetch data from Dune & update cache
-        run: node update-dune-cache.js  # این بار چون در دایرکتوری ./scripts هستیم، نیازی به مسیر کامل نیست
-        working-directory: ./scripts
+        run: node update-dune-cache.js  # اینجا فقط نام اسکریپت را می‌دهیم، چون در همان دایرکتوری هستیم
+        working-directory: ./scripts  # مسیر صحیح به دایرکتوری scripts
         env:
           DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}  # استفاده از کلید API از Secrets
 
-      # مرحله 5: چک کردن تغییرات در فایل کش
+      # مرحله 6: چک کردن تغییرات در فایل کش
       - name: Check if file changed
         run: |
           echo "---- Diff Output ----"
           git diff data/DB.json || echo "No diff"  # بررسی تغییرات در فایل کش
 
-      # مرحله 6: commit و push کردن تغییرات
+      # مرحله 7: commit و push کردن تغییرات
       - name: Commit & push updated cache
         run: |
           git config --global user.email "actions@github.com"  # تنظیمات کاربری برای commit
