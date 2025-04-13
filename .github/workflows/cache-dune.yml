@@ -15,11 +15,11 @@ jobs:
         uses: actions/checkout@v3
 
       # مرحله 2: چاپ مسیرهای دایرکتوری برای بررسی
-      - name: Check directory structure
+      - name: Print working directory and list files
         run: |
           echo "Current working directory:"
           pwd
-          echo "Contents of current directory:"
+          echo "Files in current directory:"
           ls -alh
 
       # مرحله 3: نصب Node.js
