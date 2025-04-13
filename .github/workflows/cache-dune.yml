@@ -23,10 +23,12 @@ jobs:
       # مرحله 3: نصب وابستگی‌ها
       - name: Install dependencies
         run: npm install
+        working-directory: ./scripts
 
       # مرحله 4: دریافت داده‌ها از Dune و بروزرسانی کش
       - name: Fetch data from Dune & update cache
         run: node ./scripts/update-dune-cache.js
+        working-directory: ./scripts
         env:
           DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}  # استفاده از کلید API از Secrets
 
