@@ -2,8 +2,8 @@ name: Update Dune Cache
 
 on:
   schedule:
-    - cron: "30 22 * * *" 
-  workflow_dispatch: 
+    - cron: "30 22 * * *"  # هر روز ساعت 22:30 UTC
+  workflow_dispatch:
 
 jobs:
   update-cache:
@@ -23,6 +23,13 @@ jobs:
 
       - name: Fetch data from Dune & update cache
         run: node ./scripts/update-dune-cache.js
+        env:
+          DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}
+
+      - name: Check if file changed
+        run: |
+          echo "---- Diff Output ----"
+          git diff data/DB.json || echo "No diff"
 
       - name: Commit & push updated cache
         run: |
